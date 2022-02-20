@@ -1,0 +1,3 @@
+port = 8080
+log_level = "debug"
+rate_result_url = "http://localhost:8081"
