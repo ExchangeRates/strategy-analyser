@@ -1,4 +1,4 @@
-package server
+package api
 
 import (
 	"fmt"
@@ -18,10 +18,6 @@ type server struct {
 	controller *controller.AnalyserController
 }
 
-func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	s.router.ServeHTTP(w, r)
-}
-
 func NewServer(controller *controller.AnalyserController) *server {
 	s := &server{
 		router:     mux.NewRouter(),
@@ -34,6 +30,10 @@ func NewServer(controller *controller.AnalyserController) *server {
 	logrus.Info("starting api server")
 
 	return s
+}
+
+func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.router.ServeHTTP(w, r)
 }
 
 func (s *server) BindingAddressFromPort(port int) string {
