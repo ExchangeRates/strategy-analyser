@@ -6,7 +6,6 @@ import (
 	"github.com/ExchangeRates/strategy-analyser/internal/controller"
 	"github.com/ExchangeRates/strategy-analyser/internal/feign"
 	"github.com/ExchangeRates/strategy-analyser/internal/service"
-	"net/http"
 )
 
 func Start(config *config.Config) error {
@@ -17,7 +16,6 @@ func Start(config *config.Config) error {
 	analyseController := controller.NewAnalyserController(analyseService)
 
 	srv := api.NewServer(analyseController)
-	bindingAddr := srv.BindingAddressFromPort(config.Port)
 
-	return http.ListenAndServe(bindingAddr, srv)
+	return srv.GracefullListenAndServe(config.Port)
 }

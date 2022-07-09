@@ -7,7 +7,7 @@ import (
 )
 
 type AnalyserService interface {
-	Process(strategy string, from, to time.Time, major, minor, step float64) (float64, float64, error)
+	Process(strategy string, from, to time.Time, major, minor, step float64) (majorRes float64, minorRes float64, error error)
 }
 
 type analyserServiceImpl struct {
@@ -22,7 +22,7 @@ func NewAnalyserService(feign feign.RateResultFeign, processor ProcessStrategy) 
 	}
 }
 
-func (a *analyserServiceImpl) Process(strategy string, from, to time.Time, major, minor, step float64) (float64, float64, error) {
+func (a *analyserServiceImpl) Process(strategy string, from, to time.Time, major, minor, step float64) (majorRes float64, minorRes float64, error error) {
 
 	count, onePageSize, err := a.feign.Count(strategy, from, to)
 	if err != nil {
@@ -40,7 +40,7 @@ func (a *analyserServiceImpl) Process(strategy string, from, to time.Time, major
 		}
 	}
 
-	majorRes, minorRes := a.processor.Process(
+	majorRes, minorRes = a.processor.Process(
 		actions,
 		major,
 		minor,
