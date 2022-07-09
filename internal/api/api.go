@@ -16,7 +16,7 @@ import (
 )
 
 type Server interface {
-	GracefullListenAndServe(port int)
+	GracefullListenAndServe(port int) error
 }
 
 type server struct {
@@ -25,7 +25,7 @@ type server struct {
 	controller *controller.AnalyserController
 }
 
-func NewServer(controller *controller.AnalyserController) *server {
+func NewServer(controller *controller.AnalyserController) Server {
 	s := &server{
 		router:     mux.NewRouter(),
 		logger:     logrus.New(),
